@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorting Algorithm Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+        </div>
+        <div>
+          <h1>Sort<span>Visualizer</span></h1>
+          <p class="subtitle">Interactive DSA Educational Platform</p>
+        </div>
+      </div>
+
+      <!-- View Navigation Tabs -->
+      <nav class="app-nav">
+        <a href="#visualizerSection" class="nav-btn active" id="navVisualizerBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Visualizer
+        </a>
+        <a href="#learningSection" class="nav-btn" id="navLearningBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+          Learning Mode
+        </a>
+        <a href="#comparisonDashboard" class="nav-btn" id="navComparisonBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          Comparison
+        </a>
+        <a href="#educationalSection" class="nav-btn" id="navEducationalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Theory & Glossary
+        </a>
+      </nav>
+
+      <!-- Algorithm Select Pills -->
+      <div class="algo-selector-container">
+        <span class="selector-label">Algorithm:</span>
+        <div class="algo-buttons" id="algoButtons">
+          <button class="algo-btn active" data-algo="bubble">Bubble Sort</button>
+          <button class="algo-btn" data-algo="selection">Selection Sort</button>
+          <button class="algo-btn" data-algo="merge">Merge Sort</button>
+        </div>
+      </div>
+
+      <!-- Sound Toggle & Status -->
+      <div class="header-actions">
+        <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound Feedback">
+          <svg id="soundOnIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="soundOffIcon" class="hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+          <span class="btn-label">Audio</span>
+        </button>
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span id="statusText">Ready</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="dashboard-main" id="visualizerSection">
+      <!-- Left Panel: Controls & Custom Inputs -->
+      <aside class="control-panel">
+        <!-- Execution Controls -->
+        <div class="card control-card">
+          <h2 class="card-title">Execution Controls</h2>
+          <div class="action-grid">
+            <button id="startBtn" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Start Sort
+            </button>
+            <button id="pauseBtn" class="btn btn-secondary" disabled>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+              Pause
+            </button>
+            <button id="resumeBtn" class="btn btn-secondary" disabled style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Resume
+            </button>
+            <button id="resetBtn" class="btn btn-danger">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <!-- Sliders & Generation -->
+        <div class="card settings-card">
+          <h2 class="card-title">Array & Animation Config</h2>
+
+          <!-- Speed Slider -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="speedRange">Animation Speed</label>
+              <span id="speedValue" class="value-badge">Normal (50ms)</span>
+            </div>
+            <input type="range" id="speedRange" min="1" max="100" value="50" class="slider">
+            <div class="slider-marks">
+              <span>Slow</span>
+              <span>Fast</span>
+            </div>
+          </div>
+
+          <!-- Size Slider -->
+          <div class="input-group">
+            <div class="label-row">
+              <label for="sizeRange">Array Size</label>
+              <span id="sizeValue" class="value-badge">25 items</span>
+            </div>
+            <input type="range" id="sizeRange" min="5" max="60" value="25" class="slider">
+            <div class="slider-marks">
+              <span>5</span>
+              <span>60</span>
+            </div>
+          </div>
+
+          <!-- Random Generation Buttons -->
+          <div class="generation-actions">
+            <button id="randomizeBtn" class="btn btn-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
+              </svg>
+              Generate Random Array
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Array Input Card -->
+        <div class="card custom-input-card">
+          <h2 class="card-title">Custom Array Input</h2>
+          <p class="input-hint">Enter comma-separated integers (values between 5 and 350, up to 40 items):</p>
+          <div class="custom-input-box">
+            <input type="text" id="customInput" placeholder="e.g. 45, 120, 85, 32, 210, 64, 150, 95" autocomplete="off">
+            <button id="applyCustomBtn" class="btn btn-primary btn-sm">Apply</button>
+          </div>
+          <div id="customError" class="input-error hidden"></div>
+        </div>
+      </aside>
+
+      <!-- Center & Right: Visualizer Stage & Stats -->
+      <section class="visualizer-section">
+        <!-- Live Statistics Ribbon -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-label">Comparisons</span>
+            <span class="stat-value" id="compCounter">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label" id="swapOrWriteLabel">Swaps / Writes</span>
+            <span class="stat-value" id="swapCounter">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Array Size</span>
+            <span class="stat-value" id="arraySizeDisplay">25</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">Elapsed Time</span>
+            <span class="stat-value" id="timeCounter">00:00.0</span>
+          </div>
+        </div>
+
+        <!-- Color Legend Ribbon -->
+        <div class="legend-bar">
+          <div class="legend-item"><span class="legend-chip chip-default"></span> Unsorted</div>
+          <div class="legend-item"><span class="legend-chip chip-comparing"></span> Comparing</div>
+          <div class="legend-item"><span class="legend-chip chip-swapping"></span> Swapped / Written</div>
+          <div class="legend-item"><span class="legend-chip chip-active"></span> Current Min / Subarray</div>
+          <div class="legend-item"><span class="legend-chip chip-sorted"></span> Sorted</div>
+        </div>
+
+        <!-- Main Visualizer Canvas Area -->
+        <div class="visualizer-container" id="visualizerContainer">
+          <div class="bars-wrapper" id="barsWrapper">
+            <!-- Dynamic Bars will be injected here -->
+          </div>
+        </div>
+
+        <!-- Narration Box for Real-time Explanation -->
+        <div class="narration-box">
+          <div class="narration-header">
+            <span class="narration-badge">Live Step Tracker</span>
+            <span id="stepCounter" class="step-num">Step 0</span>
+          </div>
+          <p id="narrationText" class="narration-msg">Press "Start Sort" or select another algorithm to begin visualization.</p>
+        </div>
+
+        <!-- Algorithm Information & Complexity Card -->
+        <div class="card complexity-card" id="complexityInfoCard">
+          <div class="complexity-header">
+            <div>
+              <h3 id="algoTitle" class="algo-title">Bubble Sort</h3>
+              <p id="algoSubtitle" class="algo-desc">Comparison-based algorithm repeatedly swapping adjacent elements if out of order.</p>
+            </div>
+            <div class="stability-tag" id="algoStability">Stable</div>
+          </div>
+
+          <div class="complexity-metrics">
+            <div class="metric-box">
+              <span class="metric-title">Best Case Time</span>
+              <span class="metric-val" id="bestTime">Ω(N)</span>
+              <span class="metric-note">Already sorted</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-title">Average Time</span>
+              <span class="metric-val" id="avgTime">θ(N²)</span>
+              <span class="metric-note">Random order</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-title">Worst Case Time</span>
+              <span class="metric-val" id="worstTime">O(N²)</span>
+              <span class="metric-note">Reverse sorted</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-title">Worst Space</span>
+              <span class="metric-val" id="spaceComplexity">O(1)</span>
+              <span class="metric-note">Auxiliary memory</span>
+            </div>
+          </div>
+
+          <div class="algo-explanation" id="algoExplanation">
+            <h4>How it works:</h4>
+            <p id="algoMechanismText">
+              Bubble Sort repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. The pass through the list is repeated until no swaps are needed, bubbling the largest elements to the end of the array one by one.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ====================================================================
+         PHASE 1: DSA LEARNING MODE SECTION
+         ==================================================================== -->
+    <section class="learning-section" id="learningSection">
+      <!-- Learning Mode Header & Control Bar -->
+      <div class="card learning-toolbar-card">
+        <div class="toolbar-top">
+          <div>
+            <div class="section-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+              Step-by-Step Educational Tutor
+            </div>
+            <h2 class="section-title">DSA Learning Mode</h2>
+            <p class="section-subtitle">
+              Deconstruct every single comparison, swap, and divide-and-conquer operation with synchronized line-by-line pseudocode highlighting.
+            </p>
+          </div>
+
+          <!-- Algorithm Selector Pills for Learning Mode -->
+          <div class="algo-buttons" id="learnAlgoButtons">
+            <button class="algo-btn active" data-algo="bubble">Bubble Sort</button>
+            <button class="algo-btn" data-algo="selection">Selection Sort</button>
+            <button class="algo-btn" data-algo="merge">Merge Sort</button>
+          </div>
+        </div>
+
+        <!-- Stepper Deck & Configuration Bar -->
+        <div class="learning-controls-deck">
+          <!-- Step Navigation Buttons -->
+          <div class="stepper-buttons-group">
+            <button id="learnPrevBtn" class="btn btn-secondary btn-step" title="Step Backwards">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="3"></line>
+              </svg>
+              Previous Step
+            </button>
+            <button id="learnPlayBtn" class="btn btn-secondary btn-step" title="Auto Play / Pause">
+              <svg id="learnPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <svg id="learnPauseIcon" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16"></rect>
+                <rect x="14" y="4" width="4" height="16"></rect>
+              </svg>
+              <span id="learnPlayText">Auto Play</span>
+            </button>
+            <button id="learnNextBtn" class="btn btn-primary btn-step" title="Step Forward">
+              Next Step
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="3"></line>
+              </svg>
+            </button>
+            <button id="learnResetBtn" class="btn btn-danger btn-step" title="Reset Stepper">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              Reset
+            </button>
+          </div>
+
+          <!-- Step Progress Scrubber -->
+          <div class="stepper-progress-box">
+            <div class="step-indicator-row">
+              <span class="step-counter-badge">Step <strong id="learnCurrentStep">0</strong> of <strong id="learnTotalSteps">0</strong></span>
+              <span id="learnProgressPercent" class="step-percent-text">0%</span>
+            </div>
+            <input type="range" id="learnStepRange" min="0" max="0" value="0" class="slider step-slider">
+          </div>
+
+          <!-- Sample Dataset Selector -->
+          <div class="learning-dataset-picker">
+            <label for="learnDatasetSelect">Array Sample:</label>
+            <select id="learnDatasetSelect" class="custom-select">
+              <option value="default">Sample [45, 12, 85, 32, 8]</option>
+              <option value="small">Small [30, 10, 50, 20]</option>
+              <option value="reversed">Reversed [50, 40, 30, 20, 10]</option>
+              <option value="sorted">Already Sorted [10, 20, 30, 40, 50]</option>
+              <option value="duplicates">Duplicates [25, 10, 25, 10, 5]</option>
+              <option value="current">Use Current Visualizer Array</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learning Stage Area (Bars & Step Breakdown) -->
+      <div class="card learning-stage-card">
+        <div class="learning-stage-header">
+          <div class="stage-legend">
+            <span class="legend-chip chip-default"></span> Unsorted
+            <span class="legend-chip chip-comparing"></span> Comparing
+            <span class="legend-chip chip-swapping"></span> Swapped / Written
+            <span class="legend-chip chip-active"></span> Current Min / Active Range
+            <span class="legend-chip chip-sorted"></span> Sorted
+          </div>
+          <div class="stage-title-tag" id="learnAlgoBadge">Bubble Sort &bull; Learning Mode</div>
+        </div>
+
+        <div class="learning-bars-container" id="learnBarsContainer">
+          <div class="bars-wrapper" id="learnBarsWrapper">
+            <!-- Learning Bars injected via JS -->
+          </div>
+        </div>
+
+        <!-- Rich Pedagogical Narration Card -->
+        <div class="learning-narration-box" id="learnNarrationBox">
+          <div class="narration-meta-row">
+            <span class="action-tag" id="learnActionBadge">INITIALIZE</span>
+            <span class="operation-phase-text" id="learnPhaseText">Array Snapshot</span>
+          </div>
+          <h4 class="narration-title" id="learnDetailHeading">Starting Algorithm Step-by-Step Trace</h4>
+          <p class="narration-detail" id="learnDetailText">Select an algorithm and click "Next Step" or "Auto Play" to step through every atomic operation.</p>
+          <div class="narration-reason-box">
+            <span class="reason-label">Why this happens:</span>
+            <span class="reason-text" id="learnReasonText">Initial array state prepared for educational deconstruction.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-Column Grid: Synchronized Pseudocode & Comprehensive Theory -->
+      <div class="learning-details-grid">
+        <!-- Column 1: Synchronized Pseudocode Visualizer -->
+        <div class="card pseudocode-card" id="pseudocodeCard">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title">Synchronized Pseudocode</h3>
+              <span class="card-subtitle">Active line lights up in real-time matching the current operation</span>
+            </div>
+            <span class="code-lang-pill">DSA Algorithm Logic</span>
+          </div>
+          <div class="code-viewport" id="pseudocodeViewport">
+            <!-- Populated via JS with active line tracking -->
+          </div>
+        </div>
+
+        <!-- Column 2: Comprehensive Algorithm Theory Card -->
+        <div class="card theory-card" id="theoryCard">
+          <div class="card-header-flex">
+            <div>
+              <h3 class="card-title" id="theoryTitle">Bubble Sort Theory</h3>
+              <span class="card-subtitle" id="theorySubtitle">Comparison-based swapping algorithm</span>
+            </div>
+            <span class="stability-tag" id="theoryStability">Stable</span>
+          </div>
+
+          <div class="theory-content">
+            <div class="theory-section">
+              <h5>Introduction & Working Principle</h5>
+              <p id="theoryIntroText">
+                Bubble Sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. With each full pass, the largest remaining element bubbles up to its correct final position at the end of the array.
+              </p>
+            </div>
+
+            <div class="complexity-metrics-mini">
+              <div class="metric-mini">
+                <span class="m-label">Best Case</span>
+                <span class="m-val" id="theoryBest">Ω(N)</span>
+              </div>
+              <div class="metric-mini">
+                <span class="m-label">Average Case</span>
+                <span class="m-val" id="theoryAvg">θ(N²)</span>
+              </div>
+              <div class="metric-mini">
+                <span class="m-label">Worst Case</span>
+                <span class="m-val" id="theoryWorst">O(N²)</span>
+              </div>
+              <div class="metric-mini">
+                <span class="m-label">Auxiliary Space</span>
+                <span class="m-val" id="theorySpace">O(1)</span>
+              </div>
+            </div>
+
+            <div class="theory-pros-cons-grid">
+              <div class="pro-con-box pros">
+                <h6>Advantages</h6>
+                <ul id="theoryProsList">
+                  <li>Simple to understand and implement for beginners.</li>
+                  <li>In-place algorithm requiring $O(1)$ auxiliary memory.</li>
+                  <li>Stable sort: preserves relative order of equal keys.</li>
+                  <li>Early exit optimization detects already-sorted data in $\Omega(N)$ time.</li>
+                </ul>
+              </div>
+              <div class="pro-con-box cons">
+                <h6>Disadvantages</h6>
+                <ul id="theoryConsList">
+                  <li>Very inefficient on large datasets with $O(N^2)$ quadratic complexity.</li>
+                  <li>Excessive element swaps compared to Selection Sort.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="theory-section">
+              <h5>Real-World Applications</h5>
+              <p id="theoryAppsText">
+                Useful in computer graphics and game engines when polygon vertices are nearly sorted frame-to-frame, or on low-power microcontrollers with tight ROM limits where code size matters more than raw speed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Algorithm Comparison Dashboard Section -->
+    <section class="comparison-dashboard" id="comparisonDashboard">
+      <!-- Section Header & Benchmark Toolbar -->
+      <div class="card comparison-toolbar-card">
+        <div class="toolbar-top">
+          <div>
+            <div class="section-tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              Performance Analytics
+            </div>
+            <h2 class="section-title">Algorithm Comparison Dashboard</h2>
+            <p class="section-subtitle">
+              Run Bubble Sort, Selection Sort, and Merge Sort simultaneously on identical array copies without animation latency.
+            </p>
+          </div>
+          <button id="runBenchmarkBtn" class="btn btn-primary btn-benchmark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Run Comparison Benchmark
+          </button>
+        </div>
+
+        <!-- Configuration Bar -->
+        <div class="benchmark-config-bar">
+          <div class="config-item">
+            <label for="benchmarkDataset">Array Source:</label>
+            <select id="benchmarkDataset" class="custom-select">
+              <option value="current">Current Visualizer Array (Dynamic Size)</option>
+              <option value="random100">Random Array (100 Elements)</option>
+              <option value="random300">Random Array (300 Elements)</option>
+              <option value="random600">Random Array (600 Elements)</option>
+              <option value="sorted200">Already Sorted (200 Elements)</option>
+              <option value="reverse200">Reverse Sorted (200 Elements)</option>
+              <option value="duplicates200">Duplicate Values (200 Elements)</option>
+            </select>
+          </div>
+          <div class="dataset-meta-badge">
+            <span class="meta-dot"></span>
+            <span id="benchmarkArrayInfo">Dataset: Visualizer Array (25 items)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification Alert Banner -->
+      <div id="verificationBanner" class="verification-banner hidden">
+        <div class="verification-icon">✓</div>
+        <div class="verification-text">
+          <strong>Correctness Verification Passed:</strong>
+          <span id="verificationDetails">All 3 algorithms independently produced 100% identical and correctly sorted outputs.</span>
+        </div>
+      </div>
+
+      <!-- Benchmark Metrics Table -->
+      <div class="card comparison-table-card">
+        <div class="card-header-flex">
+          <h3 class="card-title">Side-by-Side Algorithm Metrics</h3>
+          <span class="card-badge">Measured with window.performance.now()</span>
+        </div>
+        <div class="table-container">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Comparisons</th>
+                <th>Swaps / Writes</th>
+                <th>Measured Time (ms)</th>
+                <th>Best Time</th>
+                <th>Average Time</th>
+                <th>Worst Time</th>
+                <th>Worst Space</th>
+                <th>Stability</th>
+              </tr>
+            </thead>
+            <tbody id="comparisonTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comparison Visual Bar Charts -->
+      <div class="comparison-charts-grid">
+        <!-- Chart 1: Operation Counts -->
+        <div class="card chart-card">
+          <div class="chart-header">
+            <h3 class="card-title">Operations Count (Comparisons vs Swaps/Writes)</h3>
+            <span class="chart-subtitle">Fewer operations indicate superior algorithmic efficiency</span>
+          </div>
+          <div class="chart-body" id="operationsChartContainer">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Chart 2: Measured Execution Time -->
+        <div class="card chart-card">
+          <div class="chart-header">
+            <h3 class="card-title">Measured Execution Time (Milliseconds)</h3>
+            <span class="chart-subtitle">Pure CPU computation time (zero animation delays)</span>
+          </div>
+          <div class="chart-body" id="timeChartContainer">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Hardware & Performance Analysis Card -->
+      <div class="card disclaimer-card">
+        <div class="disclaimer-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <h4>Performance Insights & Environmental Timing Notice</h4>
+        </div>
+        <div class="disclaimer-content">
+          <p>
+            <strong>Hardware & Runtime Variations:</strong> The highlighted <span class="fastest-pill">⚡ Fastest</span> badge indicates the shortest measured execution time on this specific machine. High-resolution browser timings (<code class="inline-code">performance.now()</code>) depend on device CPU clock speeds, JavaScript V8/SpiderMonkey JIT compiler warm-up, and background processes.
+          </p>
+          <p>
+            <strong>Asymptotic Analysis:</strong> Merge Sort consistently demonstrates $O(N \log N)$ scalability across any dataset size, while Bubble Sort and Selection Sort quickly suffer quadratic degradation ($O(N^2)$) on medium-to-large inputs. On nearly sorted inputs, Bubble Sort's $\Omega(N)$ check allows it to finish with zero swaps.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PHASE 4: ADDITIONAL EDUCATIONAL FEATURES & DSA GLOSSARY
+         ==================================================================== -->
+    <section class="educational-section" id="educationalSection">
+      <!-- Section Header -->
+      <div class="card educational-header-card">
+        <div class="section-tag">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          DSA Knowledge Base
+        </div>
+        <h2 class="section-title">Educational Hub & DSA Glossary</h2>
+        <p class="section-subtitle">
+          Core concepts, memory representations, asymptotic complexity derivations, and essential DSA terminology.
+        </p>
+      </div>
+
+      <!-- Project Overview Card -->
+      <div class="card overview-card">
+        <div class="overview-header">
+          <div class="overview-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </div>
+          <div>
+            <h3 class="card-title">Project Purpose & Academic Scope</h3>
+            <span class="card-subtitle">An interactive learning environment for Data Structures and Algorithms</span>
+          </div>
+        </div>
+        <p class="overview-text">
+          The <strong>Sorting Algorithm Visualizer</strong> is designed as an interactive educational bridge between theoretical DSA proofs and intuitive runtime execution. Sorting algorithms represent fundamental building blocks in computer science, governing search optimizations, database indexing, computer graphics, and compiler code generation.
+        </p>
+        <p class="overview-text">
+          By combining an <strong>Interactive Visualizer</strong>, a <strong>Step-by-Step Learning Stepper</strong> with synchronized pseudocode tracking, an empirical <strong>Algorithm Comparison Dashboard</strong>, and this <strong>Educational Hub</strong>, learners can thoroughly deconstruct how array permutations evolve from disorder to monotonic order.
+        </p>
+      </div>
+
+      <!-- Master Complexity Reference Matrix -->
+      <div class="card matrix-card">
+        <div class="card-header-flex">
+          <div>
+            <h3 class="card-title">Master Sorting Complexity Reference Matrix</h3>
+            <span class="card-subtitle">Theoretical bounds and characteristics compared</span>
+          </div>
+          <span class="card-badge">Asymptotic Classifications</span>
+        </div>
+        <div class="table-container">
+          <table class="comparison-table matrix-table">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Best Case Time</th>
+                <th>Average Case Time</th>
+                <th>Worst Case Time</th>
+                <th>Auxiliary Space</th>
+                <th>Stability</th>
+                <th>Paradigm / Method</th>
+                <th>Ideal Use Case</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="algo-col-name">
+                    <span class="algo-color-tag tag-bubble"></span>
+                    <strong>Bubble Sort</strong>
+                  </div>
+                </td>
+                <td class="complexity-code">Ω(N)</td>
+                <td class="complexity-code">θ(N²)</td>
+                <td class="complexity-code">O(N²)</td>
+                <td class="complexity-code">O(1)</td>
+                <td><span class="stability-tag" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">Stable</span></td>
+                <td>Adjacent Exchanging</td>
+                <td>Educational demos, nearly sorted small lists.</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="algo-col-name">
+                    <span class="algo-color-tag tag-selection"></span>
+                    <strong>Selection Sort</strong>
+                  </div>
+                </td>
+                <td class="complexity-code">Ω(N²)</td>
+                <td class="complexity-code">θ(N²)</td>
+                <td class="complexity-code">O(N²)</td>
+                <td class="complexity-code">O(1)</td>
+                <td><span class="stability-tag" style="padding: 0.15rem 0.5rem; font-size: 0.7rem; color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.1);">Unstable</span></td>
+                <td>Prefix Selection</td>
+                <td>Minimizing memory write operations ($O(N)$ swaps).</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="algo-col-name">
+                    <span class="algo-color-tag tag-merge"></span>
+                    <strong>Merge Sort</strong>
+                  </div>
+                </td>
+                <td class="complexity-code">Ω(N log N)</td>
+                <td class="complexity-code">θ(N log N)</td>
+                <td class="complexity-code">O(N log N)</td>
+                <td class="complexity-code">O(N)</td>
+                <td><span class="stability-tag" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">Stable</span></td>
+                <td>Divide and Conquer</td>
+                <td>Linked lists, external large-scale datasets, guaranteed bounds.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Core Educational Concepts Cards -->
+      <div class="concepts-grid">
+        <div class="card concept-card">
+          <div class="concept-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </div>
+          <h4>Arrays in Memory</h4>
+          <p>
+            An array is a contiguous block of memory where each element occupies a fixed number of bytes. The address of index $i$ is calculated instantaneously via $Address(i) = Base + (i \times Size)$, granting $O(1)$ random access time.
+          </p>
+        </div>
+
+        <div class="card concept-card">
+          <div class="concept-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </div>
+          <h4>The Cost of Comparisons</h4>
+          <p>
+            Comparison-based sorting algorithms decide ordering strictly by querying whether $A[i] \le A[j]$. Information theory dictates that any comparison sort requires $\Omega(N \log N)$ comparisons in the worst case to distinguish between the $N!$ possible array permutations.
+          </p>
+        </div>
+
+        <div class="card concept-card">
+          <div class="concept-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+          </div>
+          <h4>What Happens in a Swap?</h4>
+          <p>
+            A swap exchanges two values in memory using a temporary register: <code>temp = A; A = B; B = temp;</code>. While in-place swaps need $O(1)$ extra space, excessive swapping (like Bubble Sort) degrades performance due to frequent memory cache writes.
+          </p>
+        </div>
+
+        <div class="card concept-card">
+          <div class="concept-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          </div>
+          <h4>Divide-and-Conquer Paradigm</h4>
+          <p>
+            Divide-and-conquer decomposes a problem into subproblems of identical structure, solves them recursively, and merges the solutions. Merge Sort achieves $O(N \log N)$ complexity because the recursion tree has a depth of $\log_2(N)$ with $O(N)$ work performed per level.
+          </p>
+        </div>
+      </div>
+
+      <!-- DSA Glossary Grid -->
+      <div class="card glossary-card">
+        <h3 class="card-title">Comprehensive DSA Glossary</h3>
+        <p class="card-subtitle">Essential technical terms and theoretical definitions</p>
+        <div class="glossary-grid">
+          <div class="glossary-item">
+            <span class="glossary-term">In-Place Algorithm</span>
+            <p class="glossary-def">An algorithm that transforms input without using auxiliary data structures proportional to input size. Auxiliary memory is strictly $O(1)$ or $O(\log N)$ for call stack.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Stable Sorting</span>
+            <p class="glossary-def">A sorting algorithm is stable if two objects with equal keys appear in the sorted output in the exact same relative order as in the input array.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Auxiliary Space</span>
+            <p class="glossary-def">The extra temporary memory allocated by the algorithm outside the memory holding the input data itself. For example, Merge Sort requires $O(N)$ auxiliary buffer space.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Big-O Notation (O)</span>
+            <p class="glossary-def">Represents the asymptotic upper bound of algorithm runtime growth as input size $N \to \infty$. It describes the guaranteed worst-case execution envelope.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Big-Omega (Ω) & Theta (θ)</span>
+            <p class="glossary-def">$\Omega(N)$ describes the asymptotic lower bound (best possible scenario). $\theta(N)$ denotes a tight bound where upper and lower bounds grow at identical rates.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Inversions in an Array</span>
+            <p class="glossary-def">A pair $(A[i], A[j])$ is an inversion if $i < j$ and $A[i] > A[j]$. A sorted array has 0 inversions; a reversed array of size $N$ has $\frac{N(N-1)}{2}$ inversions.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Recursion Stack</span>
+            <p class="glossary-def">Stack frames allocated in system memory for recursive function calls storing return addresses, parameters, and local variables. Merge Sort uses $O(\log N)$ stack frames.</p>
+          </div>
+
+          <div class="glossary-item">
+            <span class="glossary-term">Internal vs External Sorting</span>
+            <p class="glossary-def">Internal sorting occurs entirely inside main RAM memory. External sorting processes massive datasets that do not fit in RAM using secondary storage disk partitions (e.g., External Merge Sort).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Sorting Algorithm Visualizer &bull; Intermediate DSA Project &bull; Built with Pure HTML5, CSS3 & Vanilla JavaScript</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
