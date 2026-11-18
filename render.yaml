@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: sorting-algorithm-visualizer
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./
