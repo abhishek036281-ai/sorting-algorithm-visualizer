@@ -5,10 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test-full-audit.js"
+    "test": "node test-full-audit.js",
+    "build": "node bin/setup.js",
+    "postinstall": "node bin/setup.js"
   },
   "bin": {
-    "gunicorn": "./bin/gunicorn.js"
+    "gunicorn": "./bin/gunicorn"
   },
   "engines": {
     "node": ">=18"
