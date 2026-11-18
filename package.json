@@ -1,0 +1,16 @@
+{
+  "name": "sorting-algorithm-visualizer",
+  "version": "1.0.0",
+  "description": "Sorting Algorithm Visualizer & DSA Learning Suite",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test-full-audit.js"
+  },
+  "bin": {
+    "gunicorn": "./bin/gunicorn.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

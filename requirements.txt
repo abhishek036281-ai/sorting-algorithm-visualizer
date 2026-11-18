@@ -1,1 +1,1 @@
-# Pure standard library - no external dependencies required
+gunicorn>=21.2.0
